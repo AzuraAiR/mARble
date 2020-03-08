@@ -45,6 +45,7 @@ public class PlacementWithMultipleDraggingDroppingController : MonoBehaviour
         }
     }
 
+    private Vector3 pushup;
 
     void Awake() 
     {
@@ -114,16 +115,18 @@ public class PlacementWithMultipleDraggingDroppingController : MonoBehaviour
         if(arRaycastManager.Raycast(touchPosition, hits, UnityEngine.XR.ARSubsystems.TrackableType.PlaneWithinPolygon))
         {
             Pose hitPose = hits[0].pose;
+            pushup = new Vector3(0f,placedPrefab.GetComponent<Renderer>().bounds.size.y/2.001f,0f);
 
             if(lastSelectedObject == null)
-            {
-                lastSelectedObject = Instantiate(placedPrefab, hitPose.position, hitPose.rotation).GetComponent<PlacementObject>();
+            {   
+                
+                lastSelectedObject = Instantiate(placedPrefab, hitPose.position+pushup, hitPose.rotation).GetComponent<PlacementObject>();
             }
             else 
             {
                 if(lastSelectedObject.Selected)
                 {
-                    lastSelectedObject.transform.position = hitPose.position;
+                    lastSelectedObject.transform.position = hitPose.position+pushup;
                     lastSelectedObject.transform.rotation = hitPose.rotation;
                 }
             }
