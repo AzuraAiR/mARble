@@ -46,6 +46,7 @@ public class PlacementWithMultipleDraggingDroppingController : MonoBehaviour
     }
 
     private Vector3 pushup;
+    private Vector3 orientation;
 
     void Awake() 
     {
@@ -54,9 +55,9 @@ public class PlacementWithMultipleDraggingDroppingController : MonoBehaviour
 
         if(redButton != null && greenButton != null && blueButton != null) 
         {
-            redButton.onClick.AddListener(() => ChangePrefabSelection("ARRed"));
-            greenButton.onClick.AddListener(() => ChangePrefabSelection("ARGreen"));
-            blueButton.onClick.AddListener(() => ChangePrefabSelection("ARBlue"));
+            redButton.onClick.AddListener(() => ChangePrefabSelection("Domino"));
+            greenButton.onClick.AddListener(() => ChangePrefabSelection("LightMarble"));
+            blueButton.onClick.AddListener(() => ChangePrefabSelection("LowRamp"));
         }
     }
 
@@ -117,17 +118,30 @@ public class PlacementWithMultipleDraggingDroppingController : MonoBehaviour
             Pose hitPose = hits[0].pose;
             pushup = new Vector3(0f,placedPrefab.GetComponent<Renderer>().bounds.size.y/2.001f,0f);
 
+            var nearestDomino = Domino.FindClosestDomino(hitPose.position+pushup);
+            
+            
             if(lastSelectedObject == null)
             {   
                 
+                if(nearestDomino == null) {
+                
                 lastSelectedObject = Instantiate(placedPrefab, hitPose.position+pushup, hitPose.rotation).GetComponent<PlacementObject>();
+
+                }
+                else{
+                
+                var nearestDominoDirection = nearestDomino.transform.position - (hitPose.position+pushup);
+                lastSelectedObject = Instantiate(placedPrefab, hitPose.position+pushup, Quaternion.LookRotation(nearestDominoDirection)).GetComponent<PlacementObject>();
+                
+                }
             }
             else 
             {
                 if(lastSelectedObject.Selected)
                 {
                     lastSelectedObject.transform.position = hitPose.position+pushup;
-                    lastSelectedObject.transform.rotation = hitPose.rotation;
+
                 }
             }
         }
