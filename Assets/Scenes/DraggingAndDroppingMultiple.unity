@@ -1113,9 +1113,9 @@ MonoBehaviour:
   welcomePanel: {fileID: 67665931}
   dismissButton: {fileID: 1718691374}
   arCamera: {fileID: 1737330649}
-  redButton: {fileID: 1432412969}
-  greenButton: {fileID: 1696022942}
-  blueButton: {fileID: 1915065138}
+  DominoButton: {fileID: 1432412969}
+  MarbleButton: {fileID: 1915065138}
+  RampButton: {fileID: 1696022942}
 --- !u!114 &758132665
 MonoBehaviour:
   m_ObjectHideFlags: 0
