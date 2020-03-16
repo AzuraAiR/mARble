@@ -1108,14 +1108,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9d0d535f380af49b88c44687d512b9b2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  placedPrefab: {fileID: 1632293209305324, guid: 3a717ea17c85243cd8cc62c410813bbc,
-    type: 3}
+  currSelectedPrefab: {fileID: 0}
   welcomePanel: {fileID: 67665931}
   dismissButton: {fileID: 1718691374}
   arCamera: {fileID: 1737330649}
   DominoButton: {fileID: 1432412969}
-  MarbleButton: {fileID: 1915065138}
-  RampButton: {fileID: 1696022942}
+  RampButton: {fileID: 1915065138}
+  MarbleButton: {fileID: 1696022942}
 --- !u!114 &758132665
 MonoBehaviour:
   m_ObjectHideFlags: 0

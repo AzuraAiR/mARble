@@ -25,7 +25,7 @@ public class PlacementWithMultipleDraggingDroppingController : MonoBehaviour {
     private PlacementObject lastSelectedObject;
 
     [SerializeField]
-    private Button DominoButton, MarbleButton, RampButton;
+    private Button DominoButton, RampButton, MarbleButton;
 
     private GameObject PlacedPrefab {
         get { return currSelectedPrefab; }
@@ -40,8 +40,8 @@ public class PlacementWithMultipleDraggingDroppingController : MonoBehaviour {
 
         if(DominoButton != null && MarbleButton != null && RampButton != null) {
             DominoButton.onClick.AddListener(() => ChangePrefabSelection("Domino"));
+            RampButton.onClick.AddListener(() => ChangePrefabSelection("ClickyRamp"));
             MarbleButton.onClick.AddListener(() => ChangePrefabSelection("LightMarble"));
-            RampButton.onClick.AddListener(() => ChangePrefabSelection("LowRamp"));
         }
     }
 
@@ -95,7 +95,7 @@ public class PlacementWithMultipleDraggingDroppingController : MonoBehaviour {
             // Instantiate selected object
             if(lastSelectedObject == null) {
                 var nearestDomino = Domino.FindClosestDomino(hitPose.position + yOffset);
-                if(nearestDomino == null) {
+                if(nearestDomino == null || currSelectedPrefab.tag != "Domino") {
                     lastSelectedObject = Instantiate(currSelectedPrefab, hitPose.position + yOffset, hitPose.rotation).GetComponent<PlacementObject>();
                 } else {
                     var nearestDominoDirection = nearestDomino.transform.position - (hitPose.position + yOffset);
