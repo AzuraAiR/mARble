@@ -5,6 +5,10 @@ TagManager:
   serializedVersion: 2
   tags:
   - Domino
+  - ExcludeTeleport
+  - TeleportIgnore
+  - Marble
+  - Ramp
   layers:
   - Default
   - TransparentFX
