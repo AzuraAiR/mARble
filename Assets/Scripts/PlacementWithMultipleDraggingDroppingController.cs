@@ -134,7 +134,7 @@ public class PlacementWithMultipleDraggingDroppingController : MonoBehaviour {
 
     private void MoveMarble(Vector3 yOffset, Pose hitPose, float snapDistance){
         //find nearest ramp
-        var nearestRamp = Ramp.FindClosestRamp(hitPose.position);
+        var nearestRamp = Ramp.FindClosestRamp(hitPose.position + yOffset);
         if (nearestRamp == null) {
             lastSelectedObject.transform.position = hitPose.position + yOffset;
         }
@@ -143,7 +143,7 @@ public class PlacementWithMultipleDraggingDroppingController : MonoBehaviour {
             var nearestRampDirection = nearestRamp.transform.position - hitPose.position;
             float nearestRampHorizontalDistance = Mathf.Sqrt(Mathf.Pow(nearestRampDirection.x, 2) + Mathf.Pow(nearestRampDirection.y, 2));
             if (nearestRampHorizontalDistance < snapDistance) {
-                lastSelectedObject.transform.position = nearestRamp.transform.position; //Need to create snap zone on ramp
+                lastSelectedObject.transform.position = nearestRamp.transform.Find("SnapZone").position; // Need to freeze Marble after it Snaps into place
             } else {
                 lastSelectedObject.transform.position = hitPose.position + yOffset;
             }
