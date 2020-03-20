@@ -5,6 +5,8 @@ using UnityEngine.XR.ARFoundation;
 
 [RequireComponent(typeof(ARRaycastManager))]
 public class PlacementWithMultipleDraggingDroppingController : MonoBehaviour {
+    public static PlacementWithMultipleDraggingDroppingController Instance;
+
     [SerializeField]
     private GameObject currSelectedPrefab;
 
@@ -27,6 +29,20 @@ public class PlacementWithMultipleDraggingDroppingController : MonoBehaviour {
     [SerializeField]
     private Button DominoButton, RampButton, MarbleButton;
 
+    [SerializeField]
+    private Button editTypeButton;
+    enum EditType {
+        EDIT_ROTATION,
+        EDIT_SCALE
+    }
+    private EditType currEditType;
+
+    [SerializeField]
+    private Slider editSlider;
+
+    [SerializeField]
+    private Text editTextValue;
+
     private GameObject PlacedPrefab {
         get { return currSelectedPrefab; }
         set { currSelectedPrefab = value; }
@@ -35,6 +51,12 @@ public class PlacementWithMultipleDraggingDroppingController : MonoBehaviour {
     private Vector3 orientation;
 
     void Awake() {
+        if (Instance == null) {
+            Instance = this;
+        } else if (Instance != this) {
+            Destroy(gameObject);
+        }
+
         arRaycastManager = GetComponent<ARRaycastManager>();
         dismissButton.onClick.AddListener(Dismiss);
 
@@ -43,6 +65,10 @@ public class PlacementWithMultipleDraggingDroppingController : MonoBehaviour {
             RampButton.onClick.AddListener(() => ChangePrefabSelection("SimpleRamp"));
             MarbleButton.onClick.AddListener(() => ChangePrefabSelection("LightMarble"));
         }
+
+        currEditType = EditType.EDIT_ROTATION;
+        editTypeButton.onClick.AddListener(SwitchEditType);
+        editSlider.onValueChanged.AddListener(EditSliderChanged);
     }
 
     private void ChangePrefabSelection(string name) {
@@ -71,11 +97,12 @@ public class PlacementWithMultipleDraggingDroppingController : MonoBehaviour {
                 Ray ray = arCamera.ScreenPointToRay(touch.position);
                 RaycastHit hitObject;
 
+                // Sets item touched as Selected Object
                 if(Physics.Raycast(ray, out hitObject)) {
                     lastSelectedObject = hitObject.transform.GetComponent<PlacementObject>();
                     if(lastSelectedObject != null) {
-                        PlacementObject[] allOtherObjects = FindObjectsOfType<PlacementObject>();
-                        foreach(PlacementObject placementObject in allOtherObjects) {
+                        placedObjects = FindObjectsOfType<PlacementObject>();
+                        foreach(PlacementObject placementObject in placedObjects) {
                             placementObject.Selected = placementObject == lastSelectedObject;
                         }
                     }
@@ -97,7 +124,7 @@ public class PlacementWithMultipleDraggingDroppingController : MonoBehaviour {
 
 
             // Instantiate selected object
-            if(lastSelectedObject == null) {
+            if(lastSelectedObject == null && ModeManager.Instance.GetCurrMode() == GameMode.PLACEMENT_MODE) {
 
                 if (currSelectedPrefab.tag == "Domino") {
                     SpawnDomino(yOffsetPrefab, hitPose);
@@ -119,6 +146,40 @@ public class PlacementWithMultipleDraggingDroppingController : MonoBehaviour {
                     }
                 }
             }
+        }
+
+    }
+
+    private void SwitchEditType() {
+        switch (currEditType) {
+            case EditType.EDIT_ROTATION:
+                currEditType = EditType.EDIT_SCALE;
+                editTypeButton.GetComponentInChildren<Text>().text = "Change Scale";
+                break;
+            case EditType.EDIT_SCALE:
+                currEditType = EditType.EDIT_ROTATION;
+                editTypeButton.GetComponentInChildren<Text>().text = "Change Rotation";
+                break;
+        }
+    }
+    private void EditSliderChanged(float sliderValue) {
+        switch (currEditType) {
+            case EditType.EDIT_ROTATION:
+                int rotationDegree = (int)(editSlider.normalizedValue * 360);
+                if(lastSelectedObject != null) {
+                    lastSelectedObject.transform.localEulerAngles = new Vector3(0, rotationDegree, 0);
+                }
+                editTextValue.text = $"Rotation: {rotationDegree} degrees";
+                break;
+
+                // TODO: all prefabs must be in a parent gameobject with scale (1,1,1)
+                // in order to scale properly while maintaining prefabs's current scale ratios
+            case EditType.EDIT_SCALE:
+                /* if(lastSelectedObject != null) {
+                    lastSelectedObject.transform.localScale = new Vector3(sliderValue, sliderValue, sliderValue));
+                } */
+                editTextValue.text = $"Scale: {sliderValue}";
+                break;
         }
     }
 
