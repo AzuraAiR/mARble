@@ -27,7 +27,7 @@ public class PlacementWithMultipleDraggingDroppingController : MonoBehaviour {
     private PlacementObject lastSelectedObject;
 
     [SerializeField]
-    private Button DominoButton, RampButton, MarbleButton;
+    private Button DominoButton, RampButton, SpiralRampButton, MarbleButton;
 
     [SerializeField]
     private Button editTypeButton;
@@ -62,8 +62,9 @@ public class PlacementWithMultipleDraggingDroppingController : MonoBehaviour {
 
         if(DominoButton != null && MarbleButton != null && RampButton != null) {
             DominoButton.onClick.AddListener(() => ChangePrefabSelection("Domino"));
-            RampButton.onClick.AddListener(() => ChangePrefabSelection("SimpleRamp"));
-            MarbleButton.onClick.AddListener(() => ChangePrefabSelection("LightMarble"));
+            RampButton.onClick.AddListener(() => ChangePrefabSelection("SimpleRampTest"));
+            SpiralRampButton.onClick.AddListener(() => ChangePrefabSelection("SpiralRamp"));
+            MarbleButton.onClick.AddListener(() => ChangePrefabSelection("Marble"));
         }
 
         currEditType = EditType.EDIT_ROTATION;
@@ -129,9 +130,9 @@ public class PlacementWithMultipleDraggingDroppingController : MonoBehaviour {
                 if (currSelectedPrefab.tag == "Domino") {
                     SpawnDomino(yOffsetPrefab, hitPose);
                 } else {
-                    lastSelectedObject = Instantiate(currSelectedPrefab, hitPose.position + yOffsetPrefab, hitPose.rotation).GetComponent<PlacementObject>();
+                    lastSelectedObject = Instantiate(currSelectedPrefab, hitPose.position, hitPose.rotation).GetComponent<PlacementObject>();
                 }
-          
+        //    + yOffsetPrefab
 
             } else {
                 // Move selected object
@@ -139,10 +140,11 @@ public class PlacementWithMultipleDraggingDroppingController : MonoBehaviour {
                     Vector3 yOffsetSelectedObject = new Vector3(0f, lastSelectedObject.GetComponent<Renderer>().bounds.size.y/2.001f, 0f);
 
                     if (lastSelectedObject.tag == "Marble"){
-                        float snapDist = 0.03f;
+                        float snapDist = 0.05f;
                         MoveMarble(yOffsetSelectedObject, hitPose, snapDist);
                     } else {
-                        lastSelectedObject.transform.position = hitPose.position + yOffsetSelectedObject;
+                        lastSelectedObject.transform.position = hitPose.position;
+                        //  + yOffsetSelectedObject
                     }
                 }
             }
@@ -184,20 +186,20 @@ public class PlacementWithMultipleDraggingDroppingController : MonoBehaviour {
     }
 
     private void SpawnDomino(Vector3 yOffset, Pose hitPose){
-        var nearestDomino = Domino.FindClosestDomino(hitPose.position + yOffset);
+        var nearestDomino = Domino.FindClosestDomino(hitPose.position);
         if (nearestDomino == null) {
-            lastSelectedObject = Instantiate(currSelectedPrefab, hitPose.position + yOffset, hitPose.rotation).GetComponent<PlacementObject>();
+            lastSelectedObject = Instantiate(currSelectedPrefab, hitPose.position, hitPose.rotation).GetComponent<PlacementObject>();
         } else {            
-            var nearestDominoDirection = nearestDomino.transform.position - (hitPose.position + yOffset);
-            lastSelectedObject = Instantiate(currSelectedPrefab, hitPose.position + yOffset, Quaternion.LookRotation(nearestDominoDirection)).GetComponent<PlacementObject>();
+            var nearestDominoDirection = nearestDomino.transform.position - (hitPose.position);
+            lastSelectedObject = Instantiate(currSelectedPrefab, hitPose.position, Quaternion.LookRotation(nearestDominoDirection)).GetComponent<PlacementObject>();
         }
     }
 
     private void MoveMarble(Vector3 yOffset, Pose hitPose, float snapDistance){
         //find nearest ramp
-        var nearestRamp = Ramp.FindClosestRamp(hitPose.position + yOffset);
+        var nearestRamp = Ramp.FindClosestRamp(hitPose.position);
         if (nearestRamp == null) {
-            lastSelectedObject.transform.position = hitPose.position + yOffset;
+            lastSelectedObject.transform.position = hitPose.position;
         }
         //if within snap zone, snap to snap zone on ramp
         else {
@@ -206,7 +208,7 @@ public class PlacementWithMultipleDraggingDroppingController : MonoBehaviour {
             if (nearestRampHorizontalDistance < snapDistance) {
                 lastSelectedObject.transform.position = nearestRamp.transform.Find("SnapZone").position; // Need to freeze Marble after it Snaps into place
             } else {
-                lastSelectedObject.transform.position = hitPose.position + yOffset;
+                lastSelectedObject.transform.position = hitPose.position;
             }
 
         }
