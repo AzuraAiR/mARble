@@ -132,7 +132,7 @@ public class PlacementWithMultipleDraggingDroppingController : MonoBehaviour {
                 } else {
                     lastSelectedObject = Instantiate(currSelectedPrefab, hitPose.position, hitPose.rotation).GetComponent<PlacementObject>();
                 }
-        //    + yOffsetPrefab
+        //  we don't use the + yOffsetPrefab anymore
 
             } else {
                 // Move selected object
@@ -144,7 +144,7 @@ public class PlacementWithMultipleDraggingDroppingController : MonoBehaviour {
                         MoveMarble(yOffsetSelectedObject, hitPose, snapDist);
                     } else {
                         lastSelectedObject.transform.position = hitPose.position;
-                        //  + yOffsetSelectedObject
+                        //  we don't use the + yOffsetSelectedObject anymore
                     }
                 }
             }
@@ -206,7 +206,8 @@ public class PlacementWithMultipleDraggingDroppingController : MonoBehaviour {
             var nearestRampDirection = nearestRamp.transform.position - hitPose.position;
             float nearestRampHorizontalDistance = Mathf.Sqrt(Mathf.Pow(nearestRampDirection.x, 2) + Mathf.Pow(nearestRampDirection.y, 2));
             if (nearestRampHorizontalDistance < snapDistance) {
-                lastSelectedObject.transform.position = nearestRamp.transform.Find("SnapZone").position; // Need to freeze Marble after it Snaps into place
+                lastSelectedObject.transform.position = nearestRamp.transform.Find("SnapZone").position;
+                lastSelectedObject.transform.rotation = nearestRamp.transform.Find("SnapZone").rotation; // Need to freeze Marble after it Snaps into place
             } else {
                 lastSelectedObject.transform.position = hitPose.position;
             }
