@@ -62,8 +62,8 @@ public class PlacementWithMultipleDraggingDroppingController : MonoBehaviour {
 
         if(DominoButton != null && MarbleButton != null && RampButton != null) {
             DominoButton.onClick.AddListener(() => ChangePrefabSelection("Domino"));
-            RampButton.onClick.AddListener(() => ChangePrefabSelection("SimpleRampTest"));
-            SpiralRampButton.onClick.AddListener(() => ChangePrefabSelection("SpiralRamp"));
+            RampButton.onClick.AddListener(() => ChangePrefabSelection("Limacon"));
+            SpiralRampButton.onClick.AddListener(() => ChangePrefabSelection("Hypotrochoid"));
             MarbleButton.onClick.AddListener(() => ChangePrefabSelection("Marble"));
         }
 
