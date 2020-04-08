@@ -22,6 +22,7 @@ public class PlacementWithMultipleDraggingDroppingController : MonoBehaviour {
     private PlacementObject[] placedObjects;
     private Vector2 touchPosition = default;
     private ARRaycastManager arRaycastManager;
+    private ARReferencePointManager arReferencePointManager;
     private bool onTouchHold = false;
     private static List<ARRaycastHit> hits = new List<ARRaycastHit>();
     private PlacementObject lastSelectedObject;
@@ -58,6 +59,7 @@ public class PlacementWithMultipleDraggingDroppingController : MonoBehaviour {
         }
 
         arRaycastManager = GetComponent<ARRaycastManager>();
+        arReferencePointManager = GetComponent<ARReferencePointManager>();
         dismissButton.onClick.AddListener(Dismiss);
 
         if(DominoButton != null && MarbleButton != null && RampButton != null) {
@@ -132,6 +134,7 @@ public class PlacementWithMultipleDraggingDroppingController : MonoBehaviour {
                 } else {
                     lastSelectedObject = Instantiate(currSelectedPrefab, hitPose.position, hitPose.rotation).GetComponent<PlacementObject>();
                 }
+                arReferencePointManager.AddReferencePoint(hitPose);
         //  we don't use the + yOffsetPrefab anymore
 
             } else {

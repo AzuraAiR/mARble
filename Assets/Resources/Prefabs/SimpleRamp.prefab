@@ -108,7 +108,7 @@ GameObject:
   - component: {fileID: -6995611560895490290}
   - component: {fileID: -8148148257816394989}
   m_Layer: 0
-  m_Name: SimpleRampTest
+  m_Name: SimpleRamp
   m_TagString: Ramp
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
