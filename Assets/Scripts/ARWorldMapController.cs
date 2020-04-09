@@ -118,6 +118,7 @@ public class ARWorldMapController : MonoBehaviour
     {
 #if UNITY_IOS
         StartCoroutine(Load());
+        ClearVirtualObjects();
         LoadVirtualObjects();
 #endif
     }
@@ -150,16 +151,22 @@ public class ARWorldMapController : MonoBehaviour
     {
         Log("Starting the save for virtual objects");
         Save saveFile = new Save();
+        // Find all virtual objects and collate into a list
         List<GameObject> taggedObjects = new List<GameObject>();
-        //taggedObjects.AddRange(GameObject.FindGameObjectsWithTag("Marble"));
+        taggedObjects.AddRange(GameObject.FindGameObjectsWithTag("Marble"));
         taggedObjects.AddRange(GameObject.FindGameObjectsWithTag("Domino"));
-        //taggedObjects.AddRange(GameObject.FindGameObjectsWithTag("Ramp"));
-
+        taggedObjects.AddRange(GameObject.FindGameObjectsWithTag("Ramp"));
+        // Extract variables and add into save file
         foreach(GameObject tagObject in taggedObjects) {
-            saveFile.dominoTransforms.Add(tagObject.transform.position);
-            saveFile.dominoRotations.Add(tagObject.transform.rotation);
+            // Freeze before saving
+            tagObject.GetComponent<Rigidbody>().angularVelocity = Vector3.zero;
+            tagObject.GetComponent<Rigidbody>().velocity = Vector3.zero;
+            saveFile.objectTransforms.Add(tagObject.transform.position);
+            saveFile.objectRotations.Add(tagObject.transform.rotation);
+            saveFile.objectScales.Add(tagObject.transform.localScale);
+            saveFile.objectTags.Add(tagObject.tag);
         }
-
+        // Format and serialize the variables
         BinaryFormatter bf = new BinaryFormatter();
         FileStream file = File.Create(Application.persistentDataPath + "/objects.save");
         bf.Serialize(file, saveFile);
@@ -169,22 +176,32 @@ public class ARWorldMapController : MonoBehaviour
 
     public void LoadVirtualObjects()
     { 
-  // 1
       Log("Starting the load for virtual objects");
       if (File.Exists(Application.persistentDataPath + "/objects.save"))
       {
-        ClearVirtualObjects();
-
+        // Deserialize save file
         BinaryFormatter bf = new BinaryFormatter();
         FileStream file = File.Open(Application.persistentDataPath + "/objects.save", FileMode.Open);
         Save saveFile = (Save) bf.Deserialize(file);
         file.Close();
-
-    // 3
-        GameObject loadedGameObject = Resources.Load<GameObject>($"Prefabs/Domino");
-        for(int i = 0; i< saveFile.dominoTransforms.Count; i++)
+        if (saveFile.objectTransforms.Count == 0){
+            return;
+        }
+        // Recreate virtual objects
+        string name = saveFile.objectTags[0];
+        GameObject loadedGameObject = Resources.Load<GameObject>($"Prefabs/{name}");
+        for(int i = 0; i< saveFile.objectTransforms.Count; i++)
         {
-          Instantiate(loadedGameObject, saveFile.dominoTransforms[i], saveFile.dominoRotations[i]);
+            // If tag is not the same, load new prefab
+            if (saveFile.objectTags[i] != name) {
+                name = saveFile.objectTags[i];
+                loadedGameObject = Resources.Load<GameObject>($"Prefabs/{name}");
+            }
+            // Create game object, resize and freeze it
+            GameObject newObject = Instantiate(loadedGameObject, saveFile.objectTransforms[i], saveFile.objectRotations[i]);
+            newObject.transform.localScale = saveFile.objectScales[i];
+            newObject.GetComponent<Rigidbody>().angularVelocity = Vector3.zero;
+            newObject.GetComponent<Rigidbody>().velocity = Vector3.zero;
         }
         Log("Successfully replicated Dominoes");
   }
