@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using System.IO;
- using System.Runtime.Serialization.Formatters.Binary;
+using System.Runtime.Serialization.Formatters.Binary;
 using Unity.Collections;
 using UnityEngine;
 using UnityEngine.UI;
@@ -106,7 +106,6 @@ public class ARWorldMapController : MonoBehaviour
     {
 #if UNITY_IOS
         StartCoroutine(Save());
-        SaveVirtualObjects();
 #endif
     }
 
@@ -118,8 +117,6 @@ public class ARWorldMapController : MonoBehaviour
     {
 #if UNITY_IOS
         StartCoroutine(Load());
-        ClearVirtualObjects();
-        LoadVirtualObjects();
 #endif
     }
 
@@ -134,15 +131,20 @@ public class ARWorldMapController : MonoBehaviour
         ClearVirtualObjects();
     }
 
-
-    public void ClearVirtualObjects()
+    private List<GameObject> FindAllVirtualObjects()
     {
         List<GameObject> taggedObjects = new List<GameObject>();
         taggedObjects.AddRange(GameObject.FindGameObjectsWithTag("Marble"));
         taggedObjects.AddRange(GameObject.FindGameObjectsWithTag("Domino"));
         taggedObjects.AddRange(GameObject.FindGameObjectsWithTag("Ramp"));
 
-        foreach(GameObject tagObject in taggedObjects) {
+        return taggedObjects;
+    }
+
+
+    public void ClearVirtualObjects()
+    {
+        foreach(GameObject tagObject in FindAllVirtualObjects()) {
             Destroy(tagObject);
         }
     }
@@ -151,13 +153,8 @@ public class ARWorldMapController : MonoBehaviour
     {
         Log("Starting the save for virtual objects");
         Save saveFile = new Save();
-        // Find all virtual objects and collate into a list
-        List<GameObject> taggedObjects = new List<GameObject>();
-        taggedObjects.AddRange(GameObject.FindGameObjectsWithTag("Marble"));
-        taggedObjects.AddRange(GameObject.FindGameObjectsWithTag("Domino"));
-        taggedObjects.AddRange(GameObject.FindGameObjectsWithTag("Ramp"));
         // Extract variables and add into save file
-        foreach(GameObject tagObject in taggedObjects) {
+        foreach(GameObject tagObject in FindAllVirtualObjects()) {
             // Freeze before saving
             tagObject.GetComponent<Rigidbody>().angularVelocity = Vector3.zero;
             tagObject.GetComponent<Rigidbody>().velocity = Vector3.zero;
@@ -203,14 +200,30 @@ public class ARWorldMapController : MonoBehaviour
             newObject.GetComponent<Rigidbody>().angularVelocity = Vector3.zero;
             newObject.GetComponent<Rigidbody>().velocity = Vector3.zero;
         }
-        Log("Successfully replicated Dominoes");
-  }
-  else
+        Log("Successfully replicated virtual objects");
+    }
+    else
     {
-    Log("No save file found!");
+        Log("No save file found!");
     }
 }
 
+
+public void playMachine()
+{
+    SaveVirtualObjects();
+    foreach(GameObject tagObject in FindAllVirtualObjects()) {
+        tagObject.GetComponent<Rigidbody>().angularVelocity = Vector3.zero;
+        tagObject.GetComponent<Rigidbody>().velocity = Vector3.zero;
+        tagObject.GetComponent<Rigidbody>().useGravity = true;
+    }
+}
+
+public void reloadMachine()
+{
+    ClearVirtualObjects();
+    LoadVirtualObjects();
+}
 
 #if UNITY_IOS
 IEnumerator Save()
@@ -237,6 +250,7 @@ IEnumerator Save()
     request.Dispose();
 
     SaveAndDisposeWorldMap(worldMap);
+    SaveVirtualObjects();
 }
 
 IEnumerator Load()
@@ -280,14 +294,6 @@ IEnumerator Load()
     if (worldMap.valid)
     {
         Log("Deserialized successfully.");
-        List<GameObject> taggedObjects = new List<GameObject>();
-        taggedObjects.AddRange(GameObject.FindGameObjectsWithTag("Marble"));
-        taggedObjects.AddRange(GameObject.FindGameObjectsWithTag("Domino"));
-        taggedObjects.AddRange(GameObject.FindGameObjectsWithTag("Ramp"));
-
-        foreach(GameObject tagObject in taggedObjects) {
-            Log("Found object");
-        }
     }
     else
     {
@@ -297,6 +303,8 @@ IEnumerator Load()
 
     Log("Apply ARWorldMap to current session.");
     sessionSubsystem.ApplyWorldMap(worldMap);
+    ClearVirtualObjects();
+    LoadVirtualObjects();
 }
 
 void SaveAndDisposeWorldMap(ARWorldMap worldMap)
