@@ -78,7 +78,7 @@ EditorBuildSettings:
     path: 
     guid: 00000000000000000000000000000000
   - enabled: 0
-    path: Assets/Scenes/DraggingAndDroppingMultiple.unity
+    path: Assets/Scenes/Unused/DraggingAndDroppingMultiple.unity
     guid: 01d048e9bb2184c3eb378a6f810c0751
   - enabled: 0
     path: 
@@ -138,10 +138,10 @@ EditorBuildSettings:
     path: 
     guid: 00000000000000000000000000000000
   - enabled: 0
-    path: Assets/Scenes/TestRotation.unity
+    path: Assets/Scenes/Unused/TestRotation.unity
     guid: 0c624c5ac60df97489dc3048ca0d850b
   - enabled: 1
-    path: Assets/Samples/ARCore Extensions/1.16.0-preview/Cloud Anchor Sample/Scenes/CloudAnchors.unity
+    path: Assets/Scenes/CloudAnchors.unity
     guid: 83fb41cc294e74bdea57537befa00ffc
   m_configObjects:
     com.unity.xr.management.loader_settings: {fileID: 11400000, guid: 0e32c938b4fcb4c66b3380980864473e,
