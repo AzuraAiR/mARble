@@ -22,7 +22,7 @@ public class PlacementWithMultipleDraggingDroppingController : MonoBehaviour {
     private PlacementObject[] placedObjects;
     private Vector2 touchPosition = default;
     private ARRaycastManager arRaycastManager;
-    private ARReferencePointManager arReferencePointManager;
+    private ARAnchorManager arReferencePointManager;
     private bool onTouchHold = false;
     private static List<ARRaycastHit> hits = new List<ARRaycastHit>();
     private PlacementObject lastSelectedObject;
@@ -59,7 +59,7 @@ public class PlacementWithMultipleDraggingDroppingController : MonoBehaviour {
         }
 
         arRaycastManager = GetComponent<ARRaycastManager>();
-        arReferencePointManager = GetComponent<ARReferencePointManager>();
+        arReferencePointManager = GetComponent<ARAnchorManager>();
         dismissButton.onClick.AddListener(Dismiss);
 
         if(DominoButton != null && MarbleButton != null && RampButton != null) {
@@ -121,10 +121,6 @@ public class PlacementWithMultipleDraggingDroppingController : MonoBehaviour {
             Pose hitPose = hits[0].pose;
             // yOffset to prevent object clipping through AR plane
             Vector3 yOffsetPrefab = new Vector3(0f, currSelectedPrefab.GetComponent<Renderer>().bounds.size.y/2.001f, 0f);
-            
-            
-            
-
 
             // Instantiate selected object
             if(lastSelectedObject == null && ModeManager.Instance.GetCurrMode() == GameMode.PLACEMENT_MODE) {
@@ -134,7 +130,7 @@ public class PlacementWithMultipleDraggingDroppingController : MonoBehaviour {
                 } else {
                     lastSelectedObject = Instantiate(currSelectedPrefab, hitPose.position, hitPose.rotation).GetComponent<PlacementObject>();
                 }
-                arReferencePointManager.AddReferencePoint(hitPose);
+                arReferencePointManager.AddAnchor(hitPose);
         //  we don't use the + yOffsetPrefab anymore
 
             } else {
