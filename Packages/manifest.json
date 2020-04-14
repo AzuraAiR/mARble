@@ -1,6 +1,6 @@
 {
   "dependencies": {
-    "com.google.ar.core.arfoundation.extensions": "file:/Users/wzneo/Desktop/mARble/arcoreextension1.16",
+    "com.google.ar.core.arfoundation.extensions": "file:../arcoreextension1.16",
     "com.unity.2d.sprite": "1.0.0",
     "com.unity.2d.tilemap": "1.0.0",
     "com.unity.ads": "2.0.8",
