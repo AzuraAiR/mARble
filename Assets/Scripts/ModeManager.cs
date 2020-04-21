@@ -33,7 +33,7 @@ public class ModeManager : MonoBehaviour {
         }
 
         currMode = GameMode.PLACEMENT_MODE;
-        currModeText.text = "Placement Mode";
+        currModeText.text = "Build";
         ShowPlacementUI();
     }
 
@@ -42,11 +42,11 @@ public class ModeManager : MonoBehaviour {
 
         switch (currMode) {
             case GameMode.PLACEMENT_MODE:
-                currModeText.text = "Placement Mode";
+                currModeText.text = "Build";
                 ShowPlacementUI();
                 break;
             case GameMode.EDIT_MODE:
-                currModeText.text = "Edit Mode";
+                currModeText.text = "Edit";
                 ShowEditUI();
                 break;
         }
