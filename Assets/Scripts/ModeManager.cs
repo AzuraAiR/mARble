@@ -52,6 +52,18 @@ public class ModeManager : MonoBehaviour {
         }
     }
 
+    public void ClickPlacementUIButton()
+    {
+        currModeText.text = "Build";
+        ShowPlacementUI();
+    }
+
+    public void ClickEditUIButton()
+    {
+        currModeText.text = "Edit";
+        ShowEditUI();
+    }
+
     public GameMode GetCurrMode() {
         return currMode;
     }
