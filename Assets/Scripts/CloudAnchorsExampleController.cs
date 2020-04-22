@@ -104,7 +104,7 @@ namespace Google.XR.ARCoreExtensions.Samples.CloudAnchors
         private PlacementObject[] placedObjects;
         public PlacementObject lastSelectedObject;
         [SerializeField]
-        private Button DominoButton, RampButton, SpiralRampButton, MarbleButton;
+        private Button DominoButton, RampButton, SpiralRampButton, MarbleButton, ColaButton, CannonButton, ClickyRampButton, HighRampButton, LowRampButton, MedRampButton, RoadRampButton;
         [SerializeField]
         private Button editTypeButton;
         enum EditType {
@@ -441,6 +441,13 @@ namespace Google.XR.ARCoreExtensions.Samples.CloudAnchors
                 RampButton.onClick.AddListener(() => ChangePrefabSelection("Limacon"));
                 SpiralRampButton.onClick.AddListener(() => ChangePrefabSelection("Hypotrochoid"));
                 MarbleButton.onClick.AddListener(() => ChangePrefabSelection("Marble"));
+                ColaButton.onClick.AddListener(() => ChangePrefabSelection("Cola Can"));
+                CannonButton.onClick.AddListener(() => ChangePrefabSelection("cannon_p"));
+                ClickyRampButton.onClick.AddListener(() => ChangePrefabSelection("ClickyRamp"));
+                HighRampButton.onClick.AddListener(() => ChangePrefabSelection("HighRamp"));
+                LowRampButton.onClick.AddListener(() => ChangePrefabSelection("LowRamp"));
+                MedRampButton.onClick.AddListener(() => ChangePrefabSelection("MedRamp"));
+                RoadRampButton.onClick.AddListener(() => ChangePrefabSelection("roadRamp"));
             }
 
             currEditType = EditType.EDIT_ROTATION;
