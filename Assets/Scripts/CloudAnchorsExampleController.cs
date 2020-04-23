@@ -104,7 +104,7 @@ namespace Google.XR.ARCoreExtensions.Samples.CloudAnchors
         private PlacementObject[] placedObjects;
         public PlacementObject lastSelectedObject;
         [SerializeField]
-        private Button DominoButton, RampButton, SpiralRampButton, MarbleButton, ColaButton, CannonButton, ClickyRampButton, HighRampButton, LowRampButton, MedRampButton, RoadRampButton;
+        private Button DominoButton, RampButton, HypotrochoidButton, MarbleButton, ColaButton, Cycloid2LoopButton, CannonButton, CannonballButton, SimpleRampButton, SpiralRampButton, StarButton, ToiletRollButton, ZigzagButton;
         [SerializeField]
         private Button editTypeButton;
         enum EditType {
@@ -439,15 +439,17 @@ namespace Google.XR.ARCoreExtensions.Samples.CloudAnchors
             {
                 DominoButton.onClick.AddListener(() => ChangePrefabSelection("Domino"));
                 RampButton.onClick.AddListener(() => ChangePrefabSelection("Limacon"));
-                SpiralRampButton.onClick.AddListener(() => ChangePrefabSelection("Hypotrochoid"));
+                HypotrochoidButton.onClick.AddListener(() => ChangePrefabSelection("Hypotrochoid"));
                 MarbleButton.onClick.AddListener(() => ChangePrefabSelection("Marble"));
                 ColaButton.onClick.AddListener(() => ChangePrefabSelection("Cola Can"));
-                CannonButton.onClick.AddListener(() => ChangePrefabSelection("cannon_p"));
-                ClickyRampButton.onClick.AddListener(() => ChangePrefabSelection("ClickyRamp"));
-                HighRampButton.onClick.AddListener(() => ChangePrefabSelection("HighRamp"));
-                LowRampButton.onClick.AddListener(() => ChangePrefabSelection("LowRamp"));
-                MedRampButton.onClick.AddListener(() => ChangePrefabSelection("MedRamp"));
-                RoadRampButton.onClick.AddListener(() => ChangePrefabSelection("roadRamp"));
+                Cycloid2LoopButton.onClick.AddListener(() => ChangePrefabSelection("Cycloid2Loop"));
+                CannonButton.onClick.AddListener(() => ChangePrefabSelection("Cannon"));
+                CannonballButton.onClick.AddListener(() => ChangePrefabSelection("Cannonball"));
+                SimpleRampButton.onClick.AddListener(() => ChangePrefabSelection("SimpleRamp"));
+                SpiralRampButton.onClick.AddListener(() => ChangePrefabSelection("SpiralRamp"));
+                StarButton.onClick.AddListener(() => ChangePrefabSelection("Star"));
+                ToiletRollButton.onClick.AddListener(() => ChangePrefabSelection("ToiletRoll"));
+                ZigzagButton.onClick.AddListener(() => ChangePrefabSelection("Zigzag"));
             }
 
             currEditType = EditType.EDIT_ROTATION;
