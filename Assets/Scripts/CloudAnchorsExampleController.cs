@@ -104,7 +104,7 @@ namespace Google.XR.ARCoreExtensions.Samples.CloudAnchors
         private PlacementObject[] placedObjects;
         public PlacementObject lastSelectedObject;
         [SerializeField]
-        private Button DominoButton, RampButton, HypotrochoidButton, MarbleButton, ColaButton, Cycloid2LoopButton, CannonButton, CannonballButton, SimpleRampButton, SpiralRampButton, StarButton, ToiletRollButton, ZigzagButton;
+        private Button DominoButton, LimaconButton, HypotrochoidButton, MarbleButton, ColaButton, Cycloid2LoopButton, CannonButton, CannonballButton, SimpleRampButton, SpiralRampButton, StarButton, ToiletRollButton, ZigzagButton;
         [SerializeField]
         private Button editTypeButton;
         enum EditType {
@@ -435,10 +435,12 @@ namespace Google.XR.ARCoreExtensions.Samples.CloudAnchors
             }
 
             // Add any additional buttons for objects here
-            if(DominoButton != null && MarbleButton != null && RampButton != null) 
+            if(DominoButton != null && MarbleButton != null && LimaconButton != null && HypotrochoidButton != null && ColaButton != null 
+                && Cycloid2LoopButton != null && CannonButton != null && CannonballButton != null && SimpleRampButton != null && SpiralRampButton != null
+                && StarButton != null && ToiletRollButton != null && ZigzagButton != null) 
             {
                 DominoButton.onClick.AddListener(() => ChangePrefabSelection("Domino"));
-                RampButton.onClick.AddListener(() => ChangePrefabSelection("Limacon"));
+                LimaconButton.onClick.AddListener(() => ChangePrefabSelection("Limacon"));
                 HypotrochoidButton.onClick.AddListener(() => ChangePrefabSelection("Hypotrochoid"));
                 MarbleButton.onClick.AddListener(() => ChangePrefabSelection("Marble"));
                 ColaButton.onClick.AddListener(() => ChangePrefabSelection("Cola Can"));
