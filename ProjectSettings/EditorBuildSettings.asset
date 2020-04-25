@@ -144,5 +144,7 @@ EditorBuildSettings:
     path: Assets/Scenes/CloudAnchors.unity
     guid: 83fb41cc294e74bdea57537befa00ffc
   m_configObjects:
+    com.unity.xr.management.arcore_loader: {fileID: 11400000, guid: 87b00c81c7bcf434f802ffbbf074834a,
+      type: 2}
     com.unity.xr.management.loader_settings: {fileID: 11400000, guid: 0e32c938b4fcb4c66b3380980864473e,
       type: 2}

@@ -382,12 +382,13 @@ namespace Google.XR.ARCoreExtensions.Samples.CloudAnchors
                 {
                     Pose hitPose = hitResults[0].pose;
                     // yOffset to prevent object clipping through AR plane
-                    // Vector3 yOffsetPrefab = new Vector3(0f, currSelectedPrefab.GetComponent<Renderer>().bounds.size.y/2.001f, 0f);
-
+                    
                     // If no existing object is selected, instantiate a new object
                     if(lastSelectedObject == null && ModeManager.Instance.GetCurrMode() == GameMode.PLACEMENT_MODE)
-                    {
-                        _InstantiateStar(_ToWorldOriginPose(hitResults[0].pose));
+                    {   
+                        // Vector3 yOffsetPrefab = new Vector3(0f, currSelectedPrefab.GetComponent<Renderer>().bounds.size.y/2.001f, 0f);
+                        // hitPose.position += yOffsetPrefab;
+                        _InstantiateStar(_ToWorldOriginPose(hitPose));
                     } 
                     else 
                     {
@@ -472,14 +473,23 @@ namespace Google.XR.ARCoreExtensions.Samples.CloudAnchors
                 editTextValue.text = $"Rotation: {rotationDegree} degrees";
                 break;
 
+                case EditType.EDIT_SCALE:
+                float zHeight = (float)(editSlider.normalizedValue * 0.5);
+                if(lastSelectedObject != null) 
+                {
+                    lastSelectedObject.transform.position = new Vector3(lastSelectedObject.transform.position.x, zHeight, lastSelectedObject.transform.position.z);
+                }
+                editTextValue.text = $"zHeight: {zHeight} units";
+                break;
+
                 // TODO: all prefabs must be in a parent gameobject with scale (1,1,1)
                 // in order to scale properly while maintaining prefabs's current scale ratios
-                case EditType.EDIT_SCALE:
-                /* if(lastSelectedObject != null) {
-                    lastSelectedObject.transform.localScale = new Vector3(sliderValue, sliderValue, sliderValue));
-                    } */
-                    editTextValue.text = $"Scale: {sliderValue}";
-                    break;
+                // case EditType.EDIT_SCALE:
+                // /* if(lastSelectedObject != null) {
+                //     lastSelectedObject.transform.localScale = new Vector3(sliderValue, sliderValue, sliderValue));
+                //     } */
+                //     editTextValue.text = $"Scale: {sliderValue}";
+                //     break;
                 }
             }
 
@@ -532,7 +542,9 @@ namespace Google.XR.ARCoreExtensions.Samples.CloudAnchors
                     if (nearestRampHorizontalDistance < snapDistance) 
                     {
                         lastSelectedObject.transform.position = nearestRamp.transform.Find("SnapZone").position;
-                        lastSelectedObject.transform.rotation = nearestRamp.transform.Find("SnapZone").rotation; // Need to freeze Marble after it Snaps into place
+                        lastSelectedObject.transform.rotation = nearestRamp.transform.Find("SnapZone").rotation; 
+                        // Need to freeze Marble after it Snaps into place
+                        lastSelectedObject.GetComponent<Rigidbody>().Sleep();
                     } 
                     else 
                     {

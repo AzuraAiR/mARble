@@ -33,7 +33,7 @@ public class CannonController : MonoBehaviour
     public void FireCannon() {
         shotPos = this.transform.Find("shotPos").transform;
         // shotPos.rotation = transform.rotation;
-        firePower = 15;
+        firePower = 600; //15
         GameObject cannonBallCopy = Instantiate(cannonBall, shotPos.position, shotPos.rotation) as GameObject;
         cannonballRB = cannonBallCopy.GetComponent<Rigidbody>();
         cannonballRB.AddForce(shotPos.forward * firePower);
