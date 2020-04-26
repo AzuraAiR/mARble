@@ -399,7 +399,7 @@ namespace Google.XR.ARCoreExtensions.Samples.CloudAnchors
 
                             if (lastSelectedObject.tag == "Marble")
                             {
-                                float snapDist = 0.05f;
+                                float snapDist = 0.075f; //0.05f;
                                 MoveMarble(hitPose, snapDist);
                             } 
                             else 
@@ -499,7 +499,7 @@ namespace Google.XR.ARCoreExtensions.Samples.CloudAnchors
                 {
                     case EditType.EDIT_ROTATION:
                     currEditType = EditType.EDIT_SCALE;
-                    editTypeButton.GetComponentInChildren<Text>().text = "Change Scale";
+                    editTypeButton.GetComponentInChildren<Text>().text = "Change Height";
                     break;
                     case EditType.EDIT_SCALE:
                     currEditType = EditType.EDIT_ROTATION;
@@ -538,7 +538,7 @@ namespace Google.XR.ARCoreExtensions.Samples.CloudAnchors
                 else 
                 {
                     var nearestRampDirection = nearestRamp.transform.position - hitPose.position;
-                    float nearestRampHorizontalDistance = Mathf.Sqrt(Mathf.Pow(nearestRampDirection.x, 2) + Mathf.Pow(nearestRampDirection.y, 2));
+                    float nearestRampHorizontalDistance = Mathf.Sqrt(Mathf.Pow(nearestRampDirection.x, 2) + Mathf.Pow(nearestRampDirection.z, 2));
                     if (nearestRampHorizontalDistance < snapDistance) 
                     {
                         lastSelectedObject.transform.position = nearestRamp.transform.Find("SnapZone").position;
