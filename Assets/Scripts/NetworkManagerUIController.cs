@@ -194,7 +194,7 @@ namespace Google.XR.ARCoreExtensions.Samples.CloudAnchors
         {
             if (success)
             {
-                SnackbarText.text = "Cloud Anchor successfully hosted! Tap to place more stars.";
+                SnackbarText.text = "Cloud Anchor successfully hosted! Tap to place virtual objects.";
             }
             else
             {
@@ -212,7 +212,7 @@ namespace Google.XR.ARCoreExtensions.Samples.CloudAnchors
         {
             if (success)
             {
-                SnackbarText.text = "Cloud Anchor successfully resolved! Tap to place more stars.";
+                SnackbarText.text = "Cloud Anchor successfully resolved! Tap to place virtual objects.";
             }
             else
             {

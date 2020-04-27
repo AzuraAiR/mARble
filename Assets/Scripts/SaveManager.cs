@@ -27,6 +27,7 @@ namespace Google.XR.ARCoreExtensions.Samples.CloudAnchors
             taggedObjects.AddRange(GameObject.FindGameObjectsWithTag("Marble"));
             taggedObjects.AddRange(GameObject.FindGameObjectsWithTag("Domino"));
             taggedObjects.AddRange(GameObject.FindGameObjectsWithTag("Ramp"));
+            taggedObjects.AddRange(GameObject.FindGameObjectsWithTag("Misc"));
 
             return taggedObjects;
         }
@@ -45,6 +46,11 @@ namespace Google.XR.ARCoreExtensions.Samples.CloudAnchors
         /// </summary>
         public void SaveVirtualObjects()
         {
+            if (!CloudAnchorsExampleController.Instance._CanPlaceStars()){
+                NetworkUIController.ShowDebugMessage("Please place a Cloud Anchor first.");
+                return;
+            }
+
             Debug.Log("Starting the save for virtual objects");
             Save saveFile = new Save();
             // Extract variables and add into save file
@@ -63,7 +69,7 @@ namespace Google.XR.ARCoreExtensions.Samples.CloudAnchors
             FileStream file = File.Create(Application.persistentDataPath + "/objects.save");
             bf.Serialize(file, saveFile);
             file.Close();
-            NetworkUIController.ShowDebugMessage("Virtuals objects successfully saved");
+            NetworkUIController.ShowDebugMessage("Virtual objects successfully saved");
         }
 
         /// <summary>
@@ -72,6 +78,11 @@ namespace Google.XR.ARCoreExtensions.Samples.CloudAnchors
         /// </summary>
         public void LoadVirtualObjects()
         { 
+            if (!CloudAnchorsExampleController.Instance._CanPlaceStars()){
+                NetworkUIController.ShowDebugMessage("Please place a Cloud Anchor first.");
+                return;
+            }
+
             ClearVirtualObjects();
             Debug.Log("Starting the load for virtual objects");
             if (File.Exists(Application.persistentDataPath + "/objects.save"))
@@ -102,7 +113,7 @@ namespace Google.XR.ARCoreExtensions.Samples.CloudAnchors
                     newObject.GetComponent<Rigidbody>().angularVelocity = Vector3.zero;
                     newObject.GetComponent<Rigidbody>().velocity = Vector3.zero;
                 }
-                NetworkUIController.ShowDebugMessage("Virtuals objects successfully loaded");
+                NetworkUIController.ShowDebugMessage("Virtual objects successfully loaded");
             }
             else
             {
