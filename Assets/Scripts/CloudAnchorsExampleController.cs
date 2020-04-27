@@ -460,6 +460,9 @@ namespace Google.XR.ARCoreExtensions.Samples.CloudAnchors
         	editSlider.onValueChanged.AddListener(EditSliderChanged);
         }
 
+        /// <summary>
+        /// Handles the events of the slider in Edit Mode
+        /// </summary>
         private void EditSliderChanged(float sliderValue) 
         {
         	switch (currEditType) 
@@ -493,6 +496,9 @@ namespace Google.XR.ARCoreExtensions.Samples.CloudAnchors
         	}
         }
 
+        /// <summary>
+        /// Handles the switching of modes
+        /// </summary>
         private void SwitchEditType() 
         {
         	switch (currEditType) 
@@ -526,6 +532,9 @@ namespace Google.XR.ARCoreExtensions.Samples.CloudAnchors
         	}
         }
 
+        /// <summary>
+        /// Handles the movement of a marble object
+        /// </summary>
         private void MoveMarble(Pose hitPose, float snapDistance) 
         {
                 //find nearest ramp
@@ -553,6 +562,10 @@ namespace Google.XR.ARCoreExtensions.Samples.CloudAnchors
         	}
         }
 
+        /// <summary>
+        /// Helper method to check if touch is over a UI object
+        /// </summary>
+        /// <returns><c>true</c>, if touch is over a UI object, <c>false</c> otherwise.</returns>
         private bool IsPointerOverUIObject() {
         	PointerEventData eventDataCurrentPosition = new PointerEventData(EventSystem.current);
         	eventDataCurrentPosition.position = new Vector2(Input.mousePosition.x, Input.mousePosition.y);
